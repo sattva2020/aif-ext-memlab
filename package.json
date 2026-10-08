@@ -1,0 +1,25 @@
+{
+  "name": "aif-ext-memlab",
+  "version": "0.1.0",
+  "description": "AI Factory extension: project memory via the memlab MCP server (past decisions + the code a change touches).",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "ai-factory",
+    "aif-extension",
+    "memlab",
+    "mcp",
+    "project-memory",
+    "decisions"
+  ],
+  "license": "MIT",
+  "files": [
+    "extension.json",
+    "injections",
+    "mcp",
+    "README.md",
+    "LICENSE"
+  ]
+}

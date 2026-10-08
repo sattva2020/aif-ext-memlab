@@ -1,0 +1,4 @@
+{
+  "command": "memlab",
+  "args": ["serve", "--root", "."]
+}
