@@ -1,19 +1,42 @@
 {
   "$schema": "https://raw.githubusercontent.com/lee-to/ai-factory/2.x/schemas/extension.schema.json",
   "name": "aif-ext-memlab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Project memory for AI Factory via memlab: registers the memlab MCP server and lets /aif-warmup, /aif-explore, /aif-plan and /aif-fix ask it for past decisions and the code a change touches. Optional by construction: without memlab every skill behaves as before.",
+  "commands": [
+    {
+      "name": "memlab-plugin",
+      "description": "Claude Code: install the memlab plugin and drop the duplicate .mcp.json entry",
+      "module": "./commands/memlab-plugin.js"
+    }
+  ],
   "injections": [
-    { "target": "aif-warmup", "position": "append", "file": "./injections/warmup-memlab.md" },
-    { "target": "aif-explore", "position": "append", "file": "./injections/explore-memlab.md" },
-    { "target": "aif-plan", "position": "append", "file": "./injections/plan-memlab.md" },
-    { "target": "aif-fix", "position": "append", "file": "./injections/fix-memlab.md" }
+    {
+      "target": "aif-warmup",
+      "position": "append",
+      "file": "./injections/warmup-memlab.md"
+    },
+    {
+      "target": "aif-explore",
+      "position": "append",
+      "file": "./injections/explore-memlab.md"
+    },
+    {
+      "target": "aif-plan",
+      "position": "append",
+      "file": "./injections/plan-memlab.md"
+    },
+    {
+      "target": "aif-fix",
+      "position": "append",
+      "file": "./injections/fix-memlab.md"
+    }
   ],
   "mcpServers": [
     {
       "key": "memlab",
       "template": "./mcp/memlab.json",
-      "instruction": "memlab: install it first — pip install git+https://github.com/sattva2020/memlab (Python 3.11+). If you already use the memlab Claude Code plugin, remove this server entry so only one memlab server starts."
+      "instruction": "memlab: install it first — pip install git+https://github.com/sattva2020/memlab (Python 3.11+). Claude Code: run `ai-factory memlab-plugin` to switch to the memlab plugin (hooks + /memlab:* commands) and drop this entry, so only one memlab server starts."
     }
   ]
 }

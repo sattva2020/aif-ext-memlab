@@ -37,9 +37,10 @@ silently skipped and skills run as in core:
   Windows, `.venv/bin/memlab` elsewhere).
 - **Allow the tools.** The core skills pre-approve only their own tools (`/aif-warmup`:
   `Read Glob Grep`), so Claude Code asks before the first memlab call, and a headless
-  run (`claude -p`) denies it. To skip the prompt, add to `.claude/settings.json`
-  (full tool names: in testing, the server-level `mcp__memlab` and the wildcard
-  `mcp__memlab__*` did not take effect):
+  run (`claude -p`) denies it. To skip the prompt, add to `.claude/settings.local.json`
+  (in testing, the same rule in the shared `.claude/settings.json` was not applied once
+  user settings were loaded, and the server-level `mcp__memlab` and the wildcard
+  `mcp__memlab__*` did not take effect — use full tool names):
 
   ```json
   {
@@ -60,6 +61,19 @@ If you use the memlab **Claude Code plugin**, it already starts a memlab server:
 remove the `memlab` entry this extension adds to `.mcp.json`, or two servers start, and
 allow the same tools under the plugin prefix (`mcp__plugin_memlab_memlab__search_decisions`, …). The skill sections work with either, whatever
 prefix the runtime gives the tools.
+
+### Claude Code: switch to the memlab plugin
+
+```bash
+ai-factory memlab-plugin            # --python <path>  --scope user|project|local  --keep-mcp  --dry-run
+```
+
+Installs the memlab Claude Code plugin (MCP server + session hooks + `/memlab:status`,
+`/memlab:recall`, `/memlab:note`) with `claude plugin install`, passing the Python that
+sits next to the `memlab` executable on PATH (or `--python`), after checking it has
+memlab's dependencies. Then it removes the bare `memlab` entry from `.mcp.json` — only if
+this extension wrote it. Default scope: `project`. `ai-factory extension update` may
+re-add the entry; run the command again after an update.
 
 Model note: in testing, Sonnet followed the memory step; Haiku read the section and skipped it.
 
