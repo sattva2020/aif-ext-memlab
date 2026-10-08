@@ -28,9 +28,40 @@ pip install git+https://github.com/sattva2020/memlab   # Python 3.11+, see memla
 ai-factory extension add https://github.com/sattva2020/aif-ext-memlab.git
 ```
 
+Two things the installer cannot do for you — check both, or the memory step is
+silently skipped and skills run as in core:
+
+- **`memlab` must be on the PATH of the shell that starts the agent.** If you installed
+  it into a virtualenv, activate it before launching the agent, or replace `"memlab"` in
+  `.mcp.json` with the absolute path to the executable (`.venv/Scripts/memlab.exe` on
+  Windows, `.venv/bin/memlab` elsewhere).
+- **Allow the tools.** The core skills pre-approve only their own tools (`/aif-warmup`:
+  `Read Glob Grep`), so Claude Code asks before the first memlab call, and a headless
+  run (`claude -p`) denies it. To skip the prompt, add to `.claude/settings.json`
+  (full tool names: in testing, the server-level `mcp__memlab` and the wildcard
+  `mcp__memlab__*` did not take effect):
+
+  ```json
+  {
+    "permissions": {
+      "allow": [
+        "mcp__memlab__search_decisions",
+        "mcp__memlab__search_code",
+        "mcp__memlab__explain",
+        "mcp__memlab__find_path"
+      ]
+    }
+  }
+  ```
+
+  `add_note` writes a file, so it is left to ask each time.
+
 If you use the memlab **Claude Code plugin**, it already starts a memlab server:
-remove the `memlab` entry this extension adds to `.mcp.json`, or two servers start.
-The skill sections work with either, whatever prefix the runtime gives the tools.
+remove the `memlab` entry this extension adds to `.mcp.json`, or two servers start, and
+allow the same tools under the plugin prefix (`mcp__plugin_memlab_memlab__search_decisions`, …). The skill sections work with either, whatever
+prefix the runtime gives the tools.
+
+Model note: in testing, Sonnet followed the memory step; Haiku read the section and skipped it.
 
 ## What memlab is
 
